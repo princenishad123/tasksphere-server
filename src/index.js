@@ -2,7 +2,8 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser"
 import dotenv from "dotenv";
-
+import cron from "node-cron";
+import axios from "axios";
 import bodyParser from "body-parser";
 import connectDB from "./db/db.js"
 import errorHandler from "./utils/errorHandler.js";
@@ -30,8 +31,13 @@ app.use(cors({
 
 
 // Sample Route
-app.get("/", (req, res) => {
-  res.send("🚀 Backend Service is Running!");
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    success: true,
+    status:"running",
+    message: "Server is running",
+    timestamp: new Date(),
+  });
 });
 
 app.use("/api/v1/auth", authRouter)
@@ -39,6 +45,16 @@ app.use("/api/v1", projectRouter)
 app.use("/api/v1",sprintRouter)
 app.use("/api/v1/task",taskRouter)
 app.use("/api/v1",dashboardRouter)
+
+
+cron.schedule("*/12 * * * *", async () => {
+  try {
+    const response = await axios.get(`${process.env.SERVER_URL}/health`);
+
+  } catch (error) {
+    console.error("Ping Failed:", error);
+  }
+});
 
 app.use(errorHandler)
 
