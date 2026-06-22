@@ -24,7 +24,7 @@ app.use(cookieParser())
 app.use(express.json({limit:"16kb"}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({
-  origin:process.env.CLIENT_URL,
+  origin:process.env.NODE_ENV === "production" ? "https://tasksphere-p5e5.vercel.app" : "http://localhost:5173",
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   credentials:true
 }));
