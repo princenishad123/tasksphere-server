@@ -1,5 +1,5 @@
 const errorHandler = (err, req, res, next) => {
-  console.error("Error:", err); // Log for debugging
+
 
   // Default status code (500 if not set)
   const statusCode = err.statusCode || 500;

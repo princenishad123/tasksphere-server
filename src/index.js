@@ -24,7 +24,7 @@ app.use(cookieParser())
 app.use(express.json({limit:"16kb"}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({
-  origin:"https://tasksphere-p5e5.vercel.app",
+  origin:process.env.CLIENT_URL,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   credentials:true
 }));
@@ -49,7 +49,7 @@ app.use("/api/v1",dashboardRouter)
 
 cron.schedule("*/12 * * * *", async () => {
   try {
-    const response = await axios.get(`https://tasksphere-server-fryi.onrender.com/health`);
+    const response = await axios.get(`${process.env.SERVER_URL}/health`);
 
   } catch (error) {
     console.error("Ping Failed:", error);
